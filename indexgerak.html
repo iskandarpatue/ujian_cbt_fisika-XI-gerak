@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Portal CBT - Ujian Sumatif Fisika: Materi Gerak 2026</title>
+  
+  <!-- Font Kaligrafi Dancing Script & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #1d4ed8;        /* Deep Kinetic Blue */
+      --primary-hover: #1e40af;
+      --accent: #0284c7;         /* Vector Velocity Cyan */
+      --bg-canvas: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Kunci seleksi teks di dashboard/modal agar tidak terganggu saat klik */
+    .overlay, header, .card-footer-signature, button {
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    input {
+      -webkit-user-select: auto;
+      user-select: auto;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* === BACKGROUND CERAH KINEMATIKA FISIKA === */
+    .bg-mesh {
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 12% 15%, rgba(186, 230, 253, 0.55) 0%, transparent 45%),
+        radial-gradient(circle at 88% 85%, rgba(224, 231, 255, 0.6) 0%, transparent 45%),
+        #f8fafc;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-size: 28px 28px;
+      background-image: 
+        linear-gradient(to right, rgba(29, 78, 216, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(29, 78, 216, 0.05) 1px, transparent 1px);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* === OVERLAY MODAL === */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 9999;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      overflow-y: auto;
+    }
+
+    .card {
+      position: relative;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 26px 22px 18px 22px;
+      border-radius: 22px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 45px -10px rgba(29, 78, 216, 0.15);
+      z-index: 10;
+    }
+
+    /* Badge Ikon Fisika: Lintasan & Vektor Gerak */
+    .motion-badge {
+      width: 74px;
+      height: 74px;
+      margin: 0 auto 12px auto;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 8px 16px -4px rgba(29, 78, 216, 0.18);
+    }
+
+    .motion-svg {
+      width: 48px;
+      height: 48px;
+    }
+
+    .sub-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      border-radius: 20px;
+      color: #0369a1;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .card h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+
+    .card p.subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 16px;
+    }
+
+    /* Info Grid */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .info-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px;
+      text-align: left;
+    }
+
+    .info-box span.label {
+      display: block;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .info-box span.value {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Rules List */
+    .rules-list {
+      background: #fff1f2;
+      border: 1px dashed #fecdd3;
+      border-radius: 12px;
+      padding: 11px;
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .rules-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      font-size: 0.76rem;
+      color: #be123c;
+      margin-bottom: 4px;
+      line-height: 1.35;
+    }
+
+    .rules-item:last-child { margin-bottom: 0; }
+
+    /* Tombol Utama */
+    .btn-glow {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #1d4ed8, #0284c7);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 20px -5px rgba(29, 78, 216, 0.35);
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-glow:active { transform: scale(0.98); }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      box-shadow: 0 10px 20px -5px rgba(220, 38, 38, 0.35);
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      padding: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    /* Catatan Kaki Kaligrafi */
+    .card-footer-signature {
+      margin-top: 14px;
+      text-align: right;
+      padding-right: 2px;
+    }
+
+    .signature-text {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #334155;
+      letter-spacing: 0.5px;
+    }
+
+    /* Input Token */
+    .token-box {
+      margin: 16px 0;
+      text-align: left;
+    }
+
+    .token-box label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .token-box input {
+      width: 100%;
+      padding: 13px;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      color: #0f172a;
+      text-align: center;
+      letter-spacing: 3px;
+      font-weight: 800;
+      text-transform: uppercase;
+      outline: none;
+    }
+
+    .token-box input:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+    }
+
+    .error-msg {
+      color: var(--danger);
+      font-size: 0.8rem;
+      margin-top: 6px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* Header Ujian Aktif */
+    header {
+      height: 60px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      position: relative;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-titles {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .exam-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .violation-badge {
+      font-size: 0.7rem;
+      color: #dc2626;
+      font-weight: 600;
+    }
+
+    .timer-badge {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-family: ui-monospace, monospace;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #1d4ed8;
+      letter-spacing: 1px;
+    }
+
+    .timer-warning {
+      background: #ef4444;
+      border-color: #dc2626;
+      color: #ffffff;
+      animation: pulse 1s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { opacity: 1; }
+      to { opacity: 0.65; }
+    }
+
+    /* Area Formulir (Touch-Scroll Bebas Macet di HP) */
+    .form-container {
+      position: absolute;
+      top: 60px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: calc(100% - 60px);
+      background: #ffffff;
+      z-index: 10;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-y !important;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-mesh"></div>
+  <div class="bg-grid"></div>
+
+  <!-- 1. Beranda Ujian / Start Screen -->
+  <div id="startScreen" class="overlay">
+    <div class="card">
+      
+      <!-- Ikon Fisika: Lintasan Parabola & Vektor Kecepatan -->
+      <div class="motion-badge">
+        <svg class="motion-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Sumbu Koordinat (X & Y) -->
+          <path d="M12 50H52" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M14 52V14" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"/>
+          <!-- Lintasan Parabola Gerak -->
+          <path d="M14 50Q30 18 50 42" stroke="#1d4ed8" stroke-width="2.6" stroke-dasharray="3 3"/>
+          <!-- Posisi Benda / Partikel Bergerak -->
+          <circle cx="32" cy="26" r="4.5" fill="#0284c7" stroke="#1d4ed8" stroke-width="1.5"/>
+          <!-- Vektor Kecepatan Tangensial (v) -->
+          <line x1="32" y1="26" x2="44" y2="20" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"/>
+          <polygon points="44,17 48,22 41,23" fill="#ef4444"/>
+          <!-- Vektor Percepatan Gravitasi (g) -->
+          <line x1="32" y1="26" x2="32" y2="36" stroke="#d97706" stroke-width="2" stroke-linecap="round"/>
+          <polygon points="30,34 32,38 34,34" fill="#d97706"/>
+        </svg>
+      </div>
+
+      <span class="sub-badge">Evaluasi Pembelajaran</span>
+      <h1>SUMATIF FISIKA: GERAK</h1>
+      <p class="subtitle">Analisis kinematika gerak, hitung kecepatan dan percepatan, serta junjung tinggi kejujuran.</p>
+
+      <div class="info-grid">
+        <div class="info-box">
+          <span class="label">MATA PELAJARAN</span>
+          <span class="value">⚛️ Fisika (Gerak)</span>
+        </div>
+        <div class="info-box">
+          <span class="label">DURASI WAKTU</span>
+          <span class="value">⏱️ 75 Menit</span>
+        </div>
+        <div class="info-box">
+          <span class="label">SISTEM UJIAN</span>
+          <span class="value">🔒 Kiosk Ketat</span>
+        </div>
+        <div class="info-box">
+          <span class="label">MAKS. PERINGATAN</span>
+          <span class="value">⚠️ 3x Toleransi</span>
+        </div>
+      </div>
+
+      <div class="rules-list">
+        <div class="rules-item">
+          <span>•</span>
+          <span>Layar otomatis beralih ke <b>Mode Layar Penuh</b>.</span>
+        </div>
+        <div class="rules-item">
+          <span>•</span>
+          <span><b>Dilarang</b> membuka Jendela Mengambang, Bola Pintas, atau beralih tab.</span>
+        </div>
+        <div class="rules-item">
+          <span>•</span>
+          <span>Pelanggaran 3x akan <b>mengunci perangkat HP permanen</b>.</span>
+        </div>
+      </div>
+
+      <button class="btn-glow" onclick="startExam()">
+        <span>Mulai Ujian Fisika Gerak</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+
+      <div class="card-footer-signature">
+        <span class="signature-text">By.Pk Guru Iskandar-TimItSmanbatPan</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Modal Peringatan Sementara (1x & 2x Pelanggaran) -->
+  <div id="warningModal" class="overlay hidden">
+    <div class="card" style="border-color: #fca5a5;">
+      <div style="font-size: 2.2rem; margin-bottom: 6px;">⚠️</div>
+      <h1 style="color: #dc2626; font-size: 1.25rem;">UJIAN TERKUNCI!</h1>
+      <p id="warningText" class="subtitle" style="margin-top: 6px; color: #475569;">Terdeteksi membuka aplikasi mengambang atau bilah pintas.</p>
+      
+      <div class="token-box">
+        <label for="inputToken">MASUKKAN TOKEN PENGAWAS:</label>
+        <input type="text" id="inputToken" placeholder="••••••••••••" autocomplete="off">
+        <p id="tokenError" class="error-msg hidden">Token tidak sesuai! Silakan panggil pengawas.</p>
+      </div>
+
+      <button class="btn-glow btn-danger" onclick="unlockExam()">Buka Kunci Layar</button>
+    </div>
+  </div>
+
+  <!-- 3. Modal KUNCI PERMANEN PERANGKAT (Auto-Block) -->
+  <div id="lockScreen" class="overlay hidden">
+    <div class="card" style="border-color: #fca5a5;">
+      <div style="font-size: 2.5rem; margin-bottom: 6px;">🛑</div>
+      <h1 style="color: #dc2626; font-size: 1.3rem;">PERANGKAT DIKUNCI</h1>
+      <p id="lockMessage" class="subtitle" style="margin-top: 8px; font-weight: 600; color: #334155;">
+        Akses ujian di perangkat ini telah dihentikan secara permanen oleh sistem.
+      </p>
+      <p style="font-size: 0.75rem; color: #94a3b8; line-height: 1.4;">
+        Membuka kembali tautan ini tidak akan membuka ujian. Silakan lapor langsung kepada pengawas di ruangan.
+      </p>
+
+      <!-- Panel Khusus Pengawas untuk Buka Kunci Perangkat -->
+      <div id="proctorResetBox" class="hidden" style="margin-top: 15px; border-top: 1px dashed #cbd5e1; padding-top: 12px;">
+        <input type="text" id="resetTokenInput" placeholder="TOKEN PENGAWAS" style="width:100%; padding:8px; text-align:center; font-weight:bold; margin-bottom:6px; text-transform:uppercase;">
+        <button class="btn-glow" style="padding:10px; font-size:0.85rem;" onclick="resetDeviceLock()">Reset Kunci Perangkat</button>
+        <p id="resetError" class="error-msg hidden">Token salah!</p>
+      </div>
+
+      <button class="btn-secondary" onclick="toggleProctorReset()">Opsi Pengawas</button>
+    </div>
+  </div>
+
+  <!-- 4. Header Ujian Aktif -->
+  <header>
+    <div class="header-info">
+      <!-- Mini Motion Icon -->
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"></path>
+        <path d="m12 5 7 7-7 7"></path>
+        <circle cx="5" cy="12" r="2"></circle>
+      </svg>
+      <div class="header-titles">
+        <span class="exam-title">Sumatif Fisika: Gerak</span>
+        <span class="violation-badge" id="violationText">Pelanggaran: 0/3</span>
+      </div>
+    </div>
+    <!-- Timer Header 75 Menit -->
+    <div class="timer-badge" id="timer">75:00</div>
+  </header>
+
+  <!-- Area Google Form Resmi Fisika Materi Gerak -->
+  <div class="form-container" id="frameContainer">
+    <!-- Iframe dimuat secara dinamis via JavaScript -->
+  </div>
+
+  <script>
+    // === KONFIGURASI SISTEM UJIAN ===
+    const EXAM_ID = "SUMATIF_FISIKA_GERAK_2026"; // ID unik ujian Fisika Gerak
+    const PROCTOR_TOKEN = "SUMATIFFISIKAGERAK2026"; // Token Pengawas Fisika Gerak
+    
+    // TAUTAN GOOGLE FORM:
+    const FORM_URL = "https://forms.gle/dV9B72BBTVWbj7uV7";
+    
+    let examDurationMinutes = 75;
+    const maxViolations = 3;
+
+    let timeRemaining = examDurationMinutes * 60;
+    let violationCount = 0;
+    let timerInterval = null;
+    let isExamActive = false;
+    let wakeLockSentinel = null;
+
+    // Elemen DOM
+    const startScreen = document.getElementById('startScreen');
+    const warningModal = document.getElementById('warningModal');
+    const lockScreen = document.getElementById('lockScreen');
+    const lockMessage = document.getElementById('lockMessage');
+    const timerDisplay = document.getElementById('timer');
+    const violationText = document.getElementById('violationText');
+    const warningText = document.getElementById('warningText');
+    const inputToken = document.getElementById('inputToken');
+    const tokenError = document.getElementById('tokenError');
+    const frameContainer = document.getElementById('frameContainer');
+
+    // ====================================================
+    // 1. CEK STATUS KUNCI PERANGKAT PERMANEN (LOCAL STORAGE)
+    // ====================================================
+    function checkDeviceLock() {
+      const lockData = localStorage.getItem("CBT_LOCK_" + EXAM_ID);
+      if (lockData) {
+        const parsed = JSON.parse(lockData);
+        showPermanentLockScreen(parsed.reason || "Perangkat Anda telah terkunci secara permanen.");
+        return true;
+      }
+      return false;
+    }
+
+    if (!checkDeviceLock()) {
+      frameContainer.innerHTML = `
+        <iframe 
+          id="examFrame" 
+          src="${FORM_URL}"
+          frameborder="0" 
+          marginheight="0" 
+          marginwidth="0"
+          scrolling="yes">
+          Memuat formulir Ujian Sumatif Fisika Materi Gerak...
+        </iframe>
+      `;
+    }
+
+    // ====================================================
+    // 2. EKSEKUSI KUNCI PERANGKAT PERMANEN
+    // ====================================================
+    function lockDevicePermanently(reason) {
+      isExamActive = false;
+      clearInterval(timerInterval);
+
+      localStorage.setItem("CBT_LOCK_" + EXAM_ID, JSON.stringify({
+        locked: true,
+        reason: reason,
+        timestamp: new Date().toISOString()
+      }));
+
+      frameContainer.innerHTML = "";
+      showPermanentLockScreen(reason);
+    }
+
+    function showPermanentLockScreen(message) {
+      startScreen.classList.add('hidden');
+      warningModal.classList.add('hidden');
+      lockMessage.textContent = message;
+      lockScreen.classList.remove('hidden');
+
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    // ====================================================
+    // 3. RESET KUNCI PERANGKAT OLEH PENGAWAS
+    // ====================================================
+    function toggleProctorReset() {
+      const box = document.getElementById('proctorResetBox');
+      box.classList.toggle('hidden');
+    }
+
+    function resetDeviceLock() {
+      const input = document.getElementById('resetTokenInput').value.trim().toUpperCase();
+      const err = document.getElementById('resetError');
+      
+      if (input === PROCTOR_TOKEN) {
+        localStorage.removeItem("CBT_LOCK_" + EXAM_ID);
+        alert("Kunci perangkat berhasil dibuka oleh pengawas. Halaman akan dimuat ulang.");
+        location.reload();
+      } else {
+        err.classList.remove('hidden');
+      }
+    }
+
+    // ====================================================
+    // 4. ALUR UJIAN AKTIF
+    // ====================================================
+    async function startExam() {
+      const docEl = document.documentElement;
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen().catch(() => {});
+      } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen();
+      }
+
+      // Mencegah layar HP mati/sleep otomatis saat murid menghitung rumus gerak
+      try {
+        if ('wakeLock' in navigator) {
+          wakeLockSentinel = await navigator.wakeLock.request('screen');
+        }
+      } catch (err) {}
+
+      startScreen.classList.add('hidden');
+      isExamActive = true;
+      startTimer();
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          lockDevicePermanently("Waktu pengerjaan ujian telah berakhir!");
+          return;
+        }
+
+        timeRemaining--;
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+        if (timeRemaining <= 300) {
+          timerDisplay.classList.add('timer-warning');
+        }
+      }, 1000);
+    }
+
+    function recordViolation(reason) {
+      if (!isExamActive) return;
+
+      violationCount++;
+      violationText.textContent = `Pelanggaran: ${violationCount}/${maxViolations}`;
+
+      if (violationCount >= maxViolations) {
+        lockDevicePermanently(`Akses Dihentikan! Anda telah mencapai batas toleransi (${maxViolations}x) pelanggaran.`);
+      } else {
+        warningText.innerHTML = `Terdeteksi: <b>${reason}</b>.<br><br>Pelanggaran ke-<b>${violationCount}</b> dari ${maxViolations}. Panggil pengawas untuk membuka kunci kembali.`;
+        inputToken.value = "";
+        tokenError.classList.add('hidden');
+        warningModal.classList.remove('hidden');
+      }
+    }
+
+    function unlockExam() {
+      const enteredToken = inputToken.value.trim().toUpperCase();
+      if (enteredToken === PROCTOR_TOKEN) {
+        tokenError.classList.add('hidden');
+        warningModal.classList.add('hidden');
+
+        const docEl = document.documentElement;
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+          if (docEl.requestFullscreen) {
+            docEl.requestFullscreen().catch(() => {});
+          } else if (docEl.webkitRequestFullscreen) {
+            docEl.webkitRequestFullscreen();
+          }
+        }
+      } else {
+        tokenError.classList.remove('hidden');
+        inputToken.value = "";
+        inputToken.focus();
+      }
+    }
+
+    // ====================================================================
+    // 5. DETEKSI KECURANGAN KETAT (JENDELA MENGAMBANG, BOLA PINTAS, SPLIT)
+    // ====================================================================
+
+    // A. DETEKSI HILANG FOKUS SISTEM REAL-TIME (Anti-Jendela Mengambang & Bola Pintas)
+    let unfocusedDuration = 0;
+    setInterval(() => {
+      if (!isExamActive) return;
+
+      if (!document.hasFocus()) {
+        unfocusedDuration += 250;
+        if (unfocusedDuration >= 500 && warningModal.classList.contains('hidden') && lockScreen.classList.contains('hidden')) {
+          recordViolation("Menyentuh Jendela Mengambang / Bola Pintas / Layar Luar");
+          unfocusedDuration = 0;
+        }
+      } else {
+        unfocusedDuration = 0;
+      }
+    }, 250);
+
+    // B. DETEKSI EVENT BLUR
+    window.addEventListener('blur', () => {
+      if (!isExamActive) return;
+      setTimeout(() => {
+        if (!document.hasFocus() && warningModal.classList.contains('hidden') && lockScreen.classList.contains('hidden')) {
+          recordViolation("Membuka aplikasi mengambang atau bilah pintas");
+        }
+      }, 400);
+    });
+
+    // C. DETEKSI PINDAH TAB / MINIMIZE BROWSER
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && isExamActive) {
+        recordViolation("Membuka aplikasi lain atau berganti layar");
+      }
+    });
+
+    // D. DETEKSI KELUAR FULLSCREEN / LAYAR BELAH (SPLIT SCREEN)
+    document.addEventListener('fullscreenchange', handleFullscreenExit);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenExit);
+
+    function handleFullscreenExit() {
+      const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!isFullscreen && isExamActive && warningModal.classList.contains('hidden')) {
+        recordViolation("Menutup mode layar penuh / Mengaktifkan Layar Belah");
+      }
+    }
+
+    // Blokir klik kanan
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+  </script>
+</body>
+</html>
